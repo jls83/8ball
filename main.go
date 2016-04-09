@@ -3,6 +3,7 @@ import(
     "fmt"
     "math/rand"
     "time"
+    "sort"
 )
 
 func random(max int) int {
@@ -10,13 +11,24 @@ func random(max int) int {
     return rand.Intn(max)
 }
 
-func resReturn(src [][]string, a int) string {
+func idxReturn(src [][]string, a int) string {
     b_len := len(src[a])
     b := random(b_len)  
     return src[a][b]
 }
 
+func userSearch(src []string, u string) bool {
+	sort.Strings(src)
+	i := sort.SearchStrings(src, u)
+	if i < len(src) && src[i] == u {
+		return true
+	}
+	return false
+}
+
 func main() {
+    var res_group int
+
     res_list := [][]string{
         { // Positive responses
         "It is certain",
@@ -45,7 +57,20 @@ func main() {
         "Very doubtful",
         },
     }
-    res_group := random(len(res_list))
-    res_final := resReturn(res_list, res_group)
+    
+    yes_men := []string{
+    	"joyce",
+    	"joe",
+    }
+    
+    user := "barry"
+    
+    if userSearch(yes_men, user) {
+		res_group = 0
+    } else {
+	    res_group = random(len(res_list))
+    }
+    
+    res_final := idxReturn(res_list, res_group)
     fmt.Println(res_final)
 }
